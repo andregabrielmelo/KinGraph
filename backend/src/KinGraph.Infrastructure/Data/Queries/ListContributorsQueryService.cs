@@ -1,0 +1,35 @@
+﻿using KinGraph.UseCases.Users;
+using KinGraph.UseCases.Users.List;
+
+namespace KinGraph.Infrastructure.Data.Queries;
+
+public class ListUsersQueryService : IListUsersQueryService
+{
+    // You can use EF, Dapper, SqlClient, etc. for queries
+    private readonly ApplicationDatabaseContext _db;
+
+    public ListUsersQueryService(ApplicationDatabaseContext db)
+    {
+        _db = db;
+    }
+
+    public async Task<PagedResult<UserDto>> ListAsync(int page, int perPage)
+    {
+        var items = await _db
+            .Users.FromSqlRaw(
+                "SELECT id, name, phone_number_country_code, phone_number_number, phone_number_extension FROM users"
+            )
+            .OrderBy(c => c.Id)
+            .Skip((page - 1) * perPage)
+            .Take(perPage)
+            .Select(c => new UserDto(c.Id, c.Name, c.PhoneNumber ?? PhoneNumber.Unknown))
+            .AsNoTracking()
+            .ToListAsync();
+
+        int totalCount = await _db.Users.CountAsync();
+        int totalPages = (int)Math.Ceiling(totalCount / (double)perPage);
+        var result = new PagedResult<UserDto>(items, page, perPage, totalCount, totalPages);
+
+        return result;
+    }
+}
