@@ -1,4 +1,4 @@
-﻿using KinGraph.Core.UserAggregate;
+﻿using KinGraph.Core.Aggregates.UserAggregate;
 using Vogen;
 
 namespace KinGraph.Infrastructure.Data.Configurations;

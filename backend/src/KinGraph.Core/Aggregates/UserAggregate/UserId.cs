@@ -1,9 +1,4 @@
-﻿[assembly: VogenDefaults(
-    staticAbstractsGeneration: StaticAbstractsGeneration.MostCommon
-        | StaticAbstractsGeneration.InstanceMethodsAndProperties
-)]
-
-namespace KinGraph.Core.UserAggregate;
+﻿namespace KinGraph.Core.Aggregates.UserAggregate;
 
 [ValueObject<int>]
 public readonly partial struct UserId

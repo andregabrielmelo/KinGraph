@@ -6,15 +6,21 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/KinGraph.AppHost/KinGraph.AppHost.csproj" />
     <Project Path="src/KinGraph.Core/KinGraph.Core.csproj" />
     <Project Path="src/KinGraph.Infrastructure/KinGraph.Infrastructure.csproj" />
+    <Project Path="src/KinGraph.ServiceDefaults/KinGraph.ServiceDefaults.csproj" />
     <Project Path="src/KinGraph.SharedKernel/KinGraph.SharedKernel.csproj" />
     <Project
       Path="src/KinGraph.UseCases/KinGraph.UseCases.csproj"
       Id="efbcb6d6-b5ec-4266-9bef-cd026e9a8f12"
     />
     <Project Path="src/KinGraph.Web/KinGraph.Web.csproj" />
-    <Project Path="src/KinGraph.AppHost/KinGraph.AppHost.csproj" />
-    <Project Path="src/KinGraph.ServiceDefaults/KinGraph.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project
+      Path="tests/KinGraph.RandomTests/KinGraph.RandomTests.csproj"
+      Id="5c1f556a-560a-4199-aa00-319261bd8b9a"
+    />
   </Folder>
 </Solution>

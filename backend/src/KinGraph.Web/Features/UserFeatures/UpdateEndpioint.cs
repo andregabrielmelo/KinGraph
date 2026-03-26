@@ -1,0 +1,89 @@
+﻿using KinGraph.Core.Aggregates.UserAggregate;
+using KinGraph.Core.ValueObjects;
+using KinGraph.UseCases.Users;
+using KinGraph.Web.Extensions;
+using KinGraph.Web.Features.UserFeatures.Update;
+
+namespace KinGraph.Web.Features.UserFeatures;
+
+public sealed class UpdateUserRequest
+{
+
+    [Required]
+    public int Id { get; set; }
+    [Required]
+    public string? Name { get; set; }
+    public string? PhoneNumber { get; set; }
+}
+
+public sealed record UpdateUserResponse(UserRecord User);
+
+public class UpdateEndpoint(IMediator _mediator)
+    : Endpoint<
+        UpdateUserRequest,
+        Results<Ok<UpdateUserResponse>, NotFound, ProblemHttpResult>,
+        UpdateUserMapper
+    >
+{
+    public override void Configure()
+    {
+        Put("/users/{id}");
+
+        Summary(s =>
+        {
+            s.Summary = "Update a new user";
+            s.Description = "Updates a new user with the specified name and unit price.";
+            s.ExampleRequest = new UpdateUserRequest { Id = 1, Name = "Sample User" };
+            s.ResponseExamples[200] = new UpdateUserResponse(new UserRecord(1, "Sample User", null));
+
+            s.Responses[201] = "User created successfully";
+            s.Responses[400] = "Invalid request data";
+        });
+
+        Tags("Users");
+
+        Description(builder =>
+            builder
+                .Accepts<UpdateUserRequest>()
+                .Produces<UpdateUserResponse>(200, "application/json")
+                .ProducesProblem(400)
+                .ProducesProblem(404)
+        );
+    }
+
+    public override async Task<
+        Results<Ok<UpdateUserResponse>, NotFound, ProblemHttpResult>
+    > ExecuteAsync(UpdateUserRequest request, CancellationToken cancellationToken)
+    {
+        var phone = string.IsNullOrEmpty(request.PhoneNumber)
+            ? null
+            : new PhoneNumber("+1", request.PhoneNumber, null);
+        var command = new UpdateUserCommand(UserId.From(request.Id), UserName.From(request.Name), phone);
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return result.ToUpdateResult<UserDto, UpdateUserResponse>(Map.FromEntity);
+    }
+}
+
+public sealed class UpdateUserValidator : Validator<UpdateUserRequest>
+{
+    public UpdateUserValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .WithMessage("Name is required")
+            .MinimumLength(2)
+            .MaximumLength(UserName.MaxLength)
+            .WithMessage($"User name must not exceed {UserName.MaxLength} characters");
+        RuleFor(x => x.Id)
+         .Must((args, userId) => args.Id == userId)
+         .WithMessage("Route and body Ids must match; cannot update Id of an existing resource.");
+    }
+}
+
+public sealed class UpdateUserMapper
+  : Mapper<UpdateUserRequest, UpdateUserResponse, UserDto>
+{
+    public override UpdateUserResponse FromEntity(UserDto e)
+      => new(new UserRecord(e.Id.Value, e.Name.Value, ""));
+}

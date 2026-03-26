@@ -5,8 +5,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Ardalis.Result" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\KinGraph.Core\KinGraph.Core.csproj" />
   </ItemGroup>
+
+    <ItemGroup>
+		<Compile Include="Users/List/**/*.cs" />
+    </ItemGroup>
 </Project>

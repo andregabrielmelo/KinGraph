@@ -34,7 +34,7 @@ public static class MiddlewareConfigurations
 
             app.MapScalarApiReference(options =>
             {
-                options.WithTitle("Clean Architecture API");
+                options.WithTitle("Kingraph API");
                 options.WithOpenApiRoutePattern("/openapi/{documentName}.json");
             });
         }

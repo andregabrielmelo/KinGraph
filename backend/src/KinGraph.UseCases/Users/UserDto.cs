@@ -1,4 +1,4 @@
-﻿using KinGraph.Core.UserAggregate;
+﻿using KinGraph.Core.Aggregates.UserAggregate;
 using KinGraph.Core.ValueObjects;
 
 namespace KinGraph.UseCases.Users;

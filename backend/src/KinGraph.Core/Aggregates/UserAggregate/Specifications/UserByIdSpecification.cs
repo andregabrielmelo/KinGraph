@@ -1,6 +1,4 @@
-﻿using KinGraph.Core.UserAggregate;
-
-namespace KinGraph.Core.Aggregates.UserAggregate.Specifications;
+﻿namespace KinGraph.Core.Aggregates.UserAggregate.Specifications;
 
 public class UserByIdSpecification : Specification<User>
 {

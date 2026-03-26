@@ -1,6 +1,7 @@
 ﻿using KinGraph.UseCases.Users;
+using KinGraph.Web.Features.UserFeatures.List;
 
-namespace KinGraph.Web.Features.Users.List;
+namespace KinGraph.Web.Features.UserFeatures;
 
 public sealed class ListUsersRequest
 {

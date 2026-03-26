@@ -1,5 +1,4 @@
 ﻿using KinGraph.Core.Aggregates.UserAggregate;
-using KinGraph.Core.UserAggregate;
 
 namespace KinGraph.Infrastructure.Data;
 

@@ -5,8 +5,7 @@ public class PhoneNumber(string countryCode, string number, string? extension) :
     public string CountryCode { get; private set; } = countryCode;
     public string Number { get; private set; } = number;
     public string? Extension { get; private set; } = extension;
-    public static PhoneNumber Unknown { get; } =
-        new PhoneNumber(String.Empty, String.Empty, String.Empty);
+    public static PhoneNumber Unknown { get; } = new PhoneNumber(String.Empty, String.Empty, null);
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

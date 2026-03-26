@@ -1,8 +1,7 @@
 ﻿using KinGraph.Core.Aggregates.UserAggregate;
-using KinGraph.Core.UserAggregate;
 using KinGraph.Core.ValueObjects;
 
-namespace KinGraph.Web.Features.Users.Create;
+namespace KinGraph.Web.Features.UserFeatures;
 
 public sealed class CreateUserRequest
 {
@@ -11,16 +10,10 @@ public sealed class CreateUserRequest
     public string? PhoneNumber { get; set; } = null;
 }
 
-public class CreateContributorResponse(int id, string name)
-{
-    public int Id { get; set; } = id;
-    public string Name { get; set; } = name;
-}
-
 public class CreateEndpoint(IRepository<User> repository)
     : Endpoint<
         CreateUserRequest,
-        Results<Created<CreateContributorResponse>, ValidationProblem, ProblemHttpResult>
+        Results<Created<UserRecord>, ValidationProblem, ProblemHttpResult>
     >
 {
     private readonly IRepository<User> _repository = repository;
@@ -46,13 +39,13 @@ public class CreateEndpoint(IRepository<User> repository)
         Description(builder =>
             builder
                 .Accepts<CreateUserRequest>()
-                .Produces<CreateContributorResponse>(201, "application/json")
+                .Produces<UserRecord>(201, "application/json")
                 .ProducesProblem(400)
         );
     }
 
     public override async Task<
-        Results<Created<CreateContributorResponse>, ValidationProblem, ProblemHttpResult>
+        Results<Created<UserRecord>, ValidationProblem, ProblemHttpResult>
     > ExecuteAsync(CreateUserRequest request, CancellationToken cancellationToken)
     {
         // TODO: Porque estou tendo que usar Core.UserAggregate.User?
@@ -66,8 +59,8 @@ public class CreateEndpoint(IRepository<User> repository)
         await _repository.AddAsync(user, cancellationToken);
         await _repository.SaveChangesAsync(cancellationToken);
 
-        var response = new CreateContributorResponse(user.Id.Value, user.Name.Value);
-        return TypedResults.Created($"/Users/{user.Id.Value}", response);
+        var response = new UserRecord(user.Id.Value, user.Name.Value, user.PhoneNumber?.ToString());
+        return TypedResults.Created($"/users/{user.Id.Value}", response);
     }
 }
 

@@ -1,7 +1,4 @@
-﻿using KinGraph.Core.UserAggregate;
-using KinGraph.Core.ValueObjects;
-
-namespace KinGraph.Core.Aggregates.UserAggregate;
+﻿namespace KinGraph.Core.Aggregates.UserAggregate;
 
 public class User(UserName name) : EntityBase<User, UserId>, IAggregateRoot
 {
@@ -9,12 +6,6 @@ public class User(UserName name) : EntityBase<User, UserId>, IAggregateRoot
     public PhoneNumber? PhoneNumber { get; private set; }
 
     public static User Create(UserName name) => new User(name);
-
-    public User UpdatePhoneNumber(PhoneNumber newPhoneNumber)
-    {
-        PhoneNumber = newPhoneNumber;
-        return this;
-    }
 
     public User UpdateName(UserName newName)
     {
@@ -24,6 +15,12 @@ public class User(UserName name) : EntityBase<User, UserId>, IAggregateRoot
         }
 
         Name = newName;
+        return this;
+    }
+
+    public User UpdatePhoneNumber(PhoneNumber newPhoneNumber)
+    {
+        PhoneNumber = newPhoneNumber;
         return this;
     }
 }
