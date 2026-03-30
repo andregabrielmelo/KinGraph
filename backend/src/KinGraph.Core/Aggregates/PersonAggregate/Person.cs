@@ -1,10 +1,18 @@
 ﻿using KinGraph.Core.Enumerations;
-using KinGraph.Core.PersonAggregate;
 
 namespace KinGraph.Core.Aggregates.PersonAggregate;
 
 public class Person(PersonName name) : EntityBase<Person, PersonId>, IAggregateRoot
 {
+    private readonly List<Relationship> _relationships = [];
+    private readonly List<Address> _addresses = [];
+    private readonly List<SocialProfile> _socialMediaProfiles = [];
+    private readonly List<Language> _languages = [];
+    private readonly List<Hobby> _hobbies = [];
+    private readonly List<Citizenship> _citizenships = [];
+    private readonly List<GovermentalDocument> _governmentalDocuments = [];
+    private readonly List<ExtraField> _extraFields = [];
+
     public PersonName Name { get; private set; } = name;
     public Gender? Gender { get; private set; }
     public MaritalStatus? MaritalStatus { get; private set; }
@@ -17,24 +25,16 @@ public class Person(PersonName name) : EntityBase<Person, PersonId>, IAggregateR
     public Occupation? Occupation { get; private set; }
     public Country? Nationality { get; private set; }
     public Address? PlaceOfBirth { get; private set; }
-    public Address? Address { get; private set; } // TODO: consider multiple addresses
-    private readonly List<SocialProfile> _socialMediaProfiles = [];
-    private readonly List<Language> _languages = [];
-    private readonly List<Hobby> _hobbies = [];
-    private readonly List<Citizenship> _citizenships = [];
-    private readonly List<GovermentalDocument> _govermentalDocuments = [];
-    private readonly List<Relationship> _relationship = [];
-    private readonly List<ExtraFields> _extraFields = []; // TODO: consider a way to keep these in database, maybe as JSON or a separate table with key-value pairs
-
+    public IReadOnlyCollection<Relationship> Relationships => _relationships.AsReadOnly();
+    public IReadOnlyCollection<Address> Addresses => _addresses.AsReadOnly();
     public IReadOnlyCollection<SocialProfile> SocialMediaProfiles =>
         _socialMediaProfiles.AsReadOnly();
     public IReadOnlyCollection<Language> Languages => _languages.AsReadOnly();
     public IReadOnlyCollection<Hobby> Hobbies => _hobbies.AsReadOnly();
     public IReadOnlyCollection<Citizenship> Citizenships => _citizenships.AsReadOnly();
-    public IReadOnlyCollection<GovermentalDocument> GovermentalDocuments =>
-        _govermentalDocuments.AsReadOnly();
-    public IReadOnlyCollection<Relationship> Relationships => _relationship.AsReadOnly();
-    public IReadOnlyCollection<ExtraFields> ExtraFields => _extraFields.AsReadOnly();
+    public IReadOnlyCollection<GovermentalDocument> GovernmentalDocuments =>
+        _governmentalDocuments.AsReadOnly();
+    public IReadOnlyCollection<ExtraField> ExtraFields => _extraFields.AsReadOnly();
 
     public static Person Create(PersonName name) => new Person(name);
 
@@ -113,9 +113,29 @@ public class Person(PersonName name) : EntityBase<Person, PersonId>, IAggregateR
         return this;
     }
 
-    public Person UpdateAddress(Address newAddress)
+    public Person AddRelationship(Relationship relationship)
     {
-        Address = newAddress;
+        if (!Relationships.Contains(relationship))
+            _relationships.Add(relationship);
+        return this;
+    }
+
+    public Person RemoveRelationship(Relationship relationship)
+    {
+        _relationships.Remove(relationship);
+        return this;
+    }
+
+    public Person AddAddress(Address address)
+    {
+        if (!_addresses.Contains(address))
+            _addresses.Add(address);
+        return this;
+    }
+
+    public Person RemoveAddress(Address address)
+    {
+        _addresses.Remove(address);
         return this;
     }
 
@@ -160,14 +180,14 @@ public class Person(PersonName name) : EntityBase<Person, PersonId>, IAggregateR
 
     public Person AddGovermentalDocument(GovermentalDocument document)
     {
-        if (!_govermentalDocuments.Contains(document))
-            _govermentalDocuments.Add(document);
+        if (!_governmentalDocuments.Contains(document))
+            _governmentalDocuments.Add(document);
         return this;
     }
 
     public Person RemoveGovermentalDocument(GovermentalDocument document)
     {
-        _govermentalDocuments.Remove(document);
+        _governmentalDocuments.Remove(document);
         return this;
     }
 
@@ -184,14 +204,14 @@ public class Person(PersonName name) : EntityBase<Person, PersonId>, IAggregateR
         return this;
     }
 
-    public Person AddExtraField(ExtraFields field)
+    public Person AddExtraField(ExtraField field)
     {
         if (!_extraFields.Contains(field))
             _extraFields.Add(field);
         return this;
     }
 
-    public Person RemoveExtraField(ExtraFields field)
+    public Person RemoveExtraField(ExtraField field)
     {
         _extraFields.Remove(field);
         return this;

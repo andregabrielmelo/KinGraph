@@ -1,7 +1,7 @@
 ﻿using KinGraph.Core.Aggregates.UserAggregate;
 using KinGraph.UseCases.Users;
+using KinGraph.UseCases.Users.Get;
 using KinGraph.Web.Extensions;
-using KinGraph.Web.Features.UserFeatures.GetById;
 
 namespace KinGraph.Web.Features.UserFeatures;
 
@@ -46,11 +46,15 @@ public class GetByIdEndpoint(IMediator mediator)
         );
     }
 
-    public override async Task<
-        Results<Ok<UserRecord>, NotFound, ProblemHttpResult>
-    > ExecuteAsync(GetUserByIdRequest request, CancellationToken cancellationToken)
+    public override async Task<Results<Ok<UserRecord>, NotFound, ProblemHttpResult>> ExecuteAsync(
+        GetUserByIdRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        var result = await mediator.Send(new GetUserQuery(UserId.From(request.Id)), cancellationToken);
+        var result = await mediator.Send(
+            new GetUserQuery(UserId.From(request.Id)),
+            cancellationToken
+        );
         return result.ToGetByIdResult(Map.FromEntity);
     }
 }
@@ -59,15 +63,12 @@ public sealed class GetByIdUserValidator : Validator<GetUserByIdRequest>
 {
     public GetByIdUserValidator()
     {
-        RuleFor(x => x.Id)
-            .GreaterThan(0)
-            .WithMessage("Id must be greater than zero");
+        RuleFor(x => x.Id).GreaterThan(0).WithMessage("Id must be greater than zero");
     }
 }
 
-public sealed class GetUserByIdMapper
-  : Mapper<GetUserByIdRequest, UserRecord, UserDto>
+public sealed class GetUserByIdMapper : Mapper<GetUserByIdRequest, UserRecord, UserDto>
 {
-    public override UserRecord FromEntity(UserDto e)
-      => new(e.Id.Value, e.Name.Value, e.PhoneNumber.ToString());
+    public override UserRecord FromEntity(UserDto e) =>
+        new(e.Id.Value, e.Name.Value, e.PhoneNumber.ToString());
 }

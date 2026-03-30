@@ -1,5 +1,5 @@
 ﻿using KinGraph.UseCases.Users;
-using KinGraph.Web.Features.UserFeatures.List;
+using KinGraph.UseCases.Users.List;
 
 namespace KinGraph.Web.Features.UserFeatures;
 

@@ -1,3 +1,4 @@
+using KinGraph.ServiceDefaults;
 using KinGraph.Web.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);

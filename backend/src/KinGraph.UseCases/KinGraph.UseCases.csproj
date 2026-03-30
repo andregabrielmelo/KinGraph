@@ -12,8 +12,4 @@
   <ItemGroup>
     <ProjectReference Include="..\KinGraph.Core\KinGraph.Core.csproj" />
   </ItemGroup>
-
-    <ItemGroup>
-		<Compile Include="Users/List/**/*.cs" />
-    </ItemGroup>
 </Project>

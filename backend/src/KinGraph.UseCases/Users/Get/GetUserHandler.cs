@@ -1,20 +1,24 @@
 ﻿using KinGraph.Core.Aggregates.UserAggregate;
 using KinGraph.Core.Aggregates.UserAggregate.Specifications;
-using KinGraph.UseCases.Users;
+using KinGraph.Core.ValueObjects;
 
 namespace KinGraph.UseCases.Users.Get;
 
 public record GetUserQuery(UserId UserId) : IQuery<Result<UserDto>>;
 
 public class GetUserHandler(IRepository<User> _repository)
-  : IQueryHandler<GetUserQuery, Result<UserDto>>
+    : IQueryHandler<GetUserQuery, Result<UserDto>>
 {
-    public async ValueTask<Result<UserDto>> Handle(GetUserQuery request, CancellationToken cancellationToken)
+    public async ValueTask<Result<UserDto>> Handle(
+        GetUserQuery request,
+        CancellationToken cancellationToken
+    )
     {
         var specification = new UserByIdSpecification(request.UserId);
         var entity = await _repository.FirstOrDefaultAsync(specification, cancellationToken);
-        if (entity == null) return Result.NotFound();
+        if (entity == null)
+            return Result.NotFound();
 
-        return new UserDto(entity.Id, entity.Name, entity.PhoneNumber);
+        return new UserDto(entity.Id, entity.Name, entity.PhoneNumber ?? PhoneNumber.Unknown);
     }
 }

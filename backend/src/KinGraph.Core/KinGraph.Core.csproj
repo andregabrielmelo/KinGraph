@@ -14,4 +14,9 @@
   <ItemGroup>
     <ProjectReference Include="..\KinGraph.SharedKernel\KinGraph.SharedKernel.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Aggregates\UserAggregate\Events\" />
+    <Folder Include="Aggregates\UserAggregate\Handlers\" />
+  </ItemGroup>
 </Project>

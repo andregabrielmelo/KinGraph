@@ -1,9 +1,9 @@
 ﻿namespace KinGraph.Core.ValueObjects;
 
-public class ExtraFields(string name, string value) : ValueObject
+public class ExtraField(string name, string value) : ValueObject
 {
-    public string Name { get; } = name;
-    public string Value { get; } = value;
+    public string Name { get; private set; } = name;
+    public string Value { get; private set; } = value;
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

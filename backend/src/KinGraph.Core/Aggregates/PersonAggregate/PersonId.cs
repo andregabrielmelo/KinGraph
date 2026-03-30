@@ -1,4 +1,4 @@
-﻿namespace KinGraph.Core.PersonAggregate;
+﻿namespace KinGraph.Core.Aggregates.PersonAggregate;
 
 [ValueObject<int>]
 public readonly partial struct PersonId

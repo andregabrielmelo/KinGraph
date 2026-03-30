@@ -1,13 +1,23 @@
 ﻿namespace KinGraph.Core.ValueObjects;
 
-public class Address(string street, City city, State state, string postalCode, Country country)
-    : ValueObject
+public class Address : ValueObject
 {
-    public string Street { get; private set; } = street;
-    public City City { get; private set; } = city;
-    public State State { get; private set; } = state;
-    public string PostalCode { get; private set; } = postalCode;
-    public Country Country { get; private set; } = country;
+    public string Street { get; private set; }
+    public City City { get; private set; }
+    public State State { get; private set; }
+    public string PostalCode { get; private set; }
+    public Country Country { get; private set; }
+
+    private Address() { } // TODO: Made to work wirh EF core in entity configurations, consider a better way to handle this
+
+    public Address(string street, City city, State state, string postalCode, Country country)
+    {
+        Street = street;
+        City = city;
+        State = state;
+        PostalCode = postalCode;
+        Country = country;
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

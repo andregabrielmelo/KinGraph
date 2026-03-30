@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using KinGraph.Core.Aggregates.UserAggregate;
+using SmartEnum.EFCore;
 
 namespace KinGraph.Infrastructure.Data;
 
@@ -13,6 +14,13 @@ public class ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseCont
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
+
+    // Configure conventions for the model, including SmartEnum support
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        base.ConfigureConventions(configurationBuilder);
+        configurationBuilder.ConfigureSmartEnum();
     }
 
     // Override SaveChanges to ensure that all changes are saved asynchronously
