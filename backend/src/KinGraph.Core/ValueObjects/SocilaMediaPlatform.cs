@@ -1,6 +1,4 @@
-﻿using Ardalis.SmartEnum;
-
-namespace KinGraph.Core.ValueObjects;
+﻿namespace KinGraph.Core.ValueObjects;
 
 public sealed class SocialMediaPlatform : SmartEnum<SocialMediaPlatform>
 {

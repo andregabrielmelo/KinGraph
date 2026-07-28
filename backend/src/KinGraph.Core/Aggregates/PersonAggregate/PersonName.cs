@@ -1,4 +1,4 @@
-﻿namespace KinGraph.Core.PersonAggregate;
+﻿namespace KinGraph.Core.Aggregates.PersonAggregate;
 
 [ValueObject<string>(conversions: Conversions.SystemTextJson)]
 public partial struct PersonName

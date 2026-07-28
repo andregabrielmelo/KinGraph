@@ -4,6 +4,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Features\PersonFeatures\**" />
+    <Content Remove="Features\PersonFeatures\**" />
+    <EmbeddedResource Remove="Features\PersonFeatures\**" />
+    <None Remove="Features\PersonFeatures\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Ardalis.Result" />
@@ -34,9 +40,5 @@
     <ProjectReference Include="..\KinGraph.SharedKernel\KinGraph.SharedKernel.csproj" />
     <ProjectReference Include="..\KinGraph.UseCases\KinGraph.UseCases.csproj" />
     <ProjectReference Include="..\KinGraph.ServiceDefaults\KinGraph.ServiceDefaults.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\PersonFeatures\" />
   </ItemGroup>
 </Project>

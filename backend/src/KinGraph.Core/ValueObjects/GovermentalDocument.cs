@@ -1,16 +1,18 @@
-﻿namespace KinGraph.Core.ValueObjects;
+﻿using KinGraph.Core.Enumerations;
+
+namespace KinGraph.Core.ValueObjects;
 
 public class GovermentalDocument(
-    string type,
+    GovernmentalDocumentType type,
     string number,
     DateTime? expirationDate,
-    string? issuingCountry
+    Country? issuingCountry
 ) : ValueObject
 {
-    public string Type { get; private set; } = type; // TODO: e.g., Passport, ID
-    public string Number { get; private set; } = number;
+    public GovernmentalDocumentType Type { get; private set; } = type;
+    public string Number { get; private set; } = number; // TODO: Interisting to limit the length of the number based on the type of document, e.g. passport number is usually 9 characters long
     public DateTime? ExpirationDate { get; private set; } = expirationDate;
-    public string? IssuingCountry { get; private set; } = issuingCountry;
+    public Country? IssuingCountry { get; private set; } = issuingCountry;
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {

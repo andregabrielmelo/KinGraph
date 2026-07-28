@@ -1,6 +1,6 @@
 ﻿using KinGraph.Core.Aggregates.UserAggregate;
+using KinGraph.UseCases.Users.Delete;
 using KinGraph.Web.Extensions;
-using KinGraph.Web.Features.UserFeatures.Delete;
 
 namespace KinGraph.Web.Features.UserFeatures;
 
@@ -11,10 +11,7 @@ public sealed class DeleteUserRequest
 }
 
 public class DeleteEndpoint(IMediator _mediator)
-    : Endpoint<
-        DeleteUserRequest,
-        Results<NoContent, NotFound, ProblemHttpResult>
-    >
+    : Endpoint<DeleteUserRequest, Results<NoContent, NotFound, ProblemHttpResult>>
 {
     public override void Configure()
     {
@@ -39,11 +36,12 @@ public class DeleteEndpoint(IMediator _mediator)
         );
     }
 
-    public override async Task<
-        Results<NoContent, NotFound, ProblemHttpResult> 
-    > ExecuteAsync(DeleteUserRequest request, CancellationToken cancellationToken)
+    public override async Task<Results<NoContent, NotFound, ProblemHttpResult>> ExecuteAsync(
+        DeleteUserRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        var command = new DeleteUserCommand(new UserId.From(request.UserId));
+        var command = new DeleteUserCommand(UserId.From(request.UserId));
         var result = await _mediator.Send(command, cancellationToken);
 
         return result.ToDeleteResult();
@@ -54,8 +52,6 @@ public sealed class DeleteUserValidator : Validator<DeleteUserRequest>
 {
     public DeleteUserValidator()
     {
-        RuleFor(x => x.UserId)
-            .NotEmpty()
-            .WithMessage("Id is required");
+        RuleFor(x => x.UserId).NotEmpty().WithMessage("Id is required");
     }
 }

@@ -1,5 +1,4 @@
-﻿using Ardalis.SmartEnum;
-using KinGraph.Core.Enumerations;
+﻿using KinGraph.Core.Enumerations;
 
 namespace KinGraph.Core.ValueObjects;
 

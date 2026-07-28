@@ -13,11 +13,4 @@
     <ProjectReference Include="..\KinGraph.Core\KinGraph.Core.csproj" />
   </ItemGroup>
 
-    <ItemGroup>
-		<Compile Include="Users/List/**/*.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Users\NewFolder\" />
-    </ItemGroup>
 </Project>

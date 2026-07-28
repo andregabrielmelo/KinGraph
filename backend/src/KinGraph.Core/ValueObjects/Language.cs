@@ -1,6 +1,4 @@
-﻿using Ardalis.SmartEnum;
-
-namespace KinGraph.Core.ValueObjects;
+﻿namespace KinGraph.Core.ValueObjects;
 
 public sealed class Language : SmartEnum<Language>
 {
@@ -32,6 +30,11 @@ public sealed class Language : SmartEnum<Language>
 
         return List.FirstOrDefault(l => l.Code == normalized)
             ?? throw new ArgumentException($"Invalid language code: {code}");
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Language other && Code == other.Code;
     }
 
     public override string ToString() => $"{Name} ({Code})";

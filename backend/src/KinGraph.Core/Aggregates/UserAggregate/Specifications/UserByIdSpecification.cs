@@ -2,6 +2,5 @@
 
 public class UserByIdSpecification : Specification<User>
 {
-    public UserByIdSpecification(UserId contributorId) =>
-        Query.Where(contributor => contributor.Id == contributorId);
+    public UserByIdSpecification(UserId personId) => Query.Where(person => person.Id == personId);
 }

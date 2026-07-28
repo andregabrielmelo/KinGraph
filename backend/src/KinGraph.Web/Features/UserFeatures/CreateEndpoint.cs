@@ -1,5 +1,6 @@
 ﻿using KinGraph.Core.Aggregates.UserAggregate;
-using KinGraph.Core.ValueObjects;
+using KinGraph.UseCases.Users.Create;
+using KinGraph.Web.Extensions;
 
 namespace KinGraph.Web.Features.UserFeatures;
 
@@ -10,14 +11,14 @@ public sealed class CreateUserRequest
     public string? PhoneNumber { get; set; } = null;
 }
 
-public class CreateEndpoint(IRepository<User> repository)
+public sealed record CreateUserResponse(int Id, string Name);
+
+public class CreateEndpoint(IMediator _mediator)
     : Endpoint<
         CreateUserRequest,
-        Results<Created<UserRecord>, ValidationProblem, ProblemHttpResult>
+        Results<Created<CreateUserResponse>, ValidationProblem, ProblemHttpResult>
     >
 {
-    private readonly IRepository<User> _repository = repository;
-
     public override void Configure()
     {
         Post("/users");
@@ -26,9 +27,9 @@ public class CreateEndpoint(IRepository<User> repository)
         Summary(s =>
         {
             s.Summary = "Create a new user";
-            s.Description = "Creates a new user with the specified name and unit price.";
+            s.Description = "Creates a new user with the specified name and phone number.";
             s.ExampleRequest = new CreateUserRequest { Name = "Sample User" };
-            s.ResponseExamples[201] = new UserRecord(1, "Sample User", null);
+            s.ResponseExamples[201] = new CreateUserResponse(Id: 1, Name: "Teste");
 
             s.Responses[201] = "User created successfully";
             s.Responses[400] = "Invalid request data";
@@ -39,28 +40,25 @@ public class CreateEndpoint(IRepository<User> repository)
         Description(builder =>
             builder
                 .Accepts<CreateUserRequest>()
-                .Produces<UserRecord>(201, "application/json")
+                .Produces<CreateUserResponse>(201, "application/json")
                 .ProducesProblem(400)
         );
     }
 
     public override async Task<
-        Results<Created<UserRecord>, ValidationProblem, ProblemHttpResult>
+        Results<Created<CreateUserResponse>, ValidationProblem, ProblemHttpResult>
     > ExecuteAsync(CreateUserRequest request, CancellationToken cancellationToken)
     {
-        // TODO: Porque estou tendo que usar Core.UserAggregate.User?
-        User user = Core.Aggregates.UserAggregate.User.Create(UserName.From(request.Name));
-        if (!string.IsNullOrEmpty(request.PhoneNumber))
-        {
-            var phoneNumber = new PhoneNumber("+1", request.PhoneNumber, String.Empty);
-            user.UpdatePhoneNumber(phoneNumber);
-        }
+        var command = new CreateUserCommand(
+            UserName.From(request.Name),
+            request.PhoneNumber ?? String.Empty
+        );
+        var result = await _mediator.Send(command, cancellationToken);
 
-        await _repository.AddAsync(user, cancellationToken);
-        await _repository.SaveChangesAsync(cancellationToken);
-
-        var response = new UserRecord(user.Id.Value, user.Name.Value, user.PhoneNumber?.ToString());
-        return TypedResults.Created($"/users/{user.Id.Value}", response);
+        return result.ToCreatedResult(
+            id => $"/users/{id}",
+            id => new CreateUserResponse(id.Value, command.Name.Value)
+        );
     }
 }
 
