@@ -1,0 +1,5 @@
+{
+  "appHost": {
+    "path": "src/KinGraph.AppHost/KinGraph.AppHost.csproj"
+  }
+}
