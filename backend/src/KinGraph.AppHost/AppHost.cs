@@ -19,9 +19,12 @@ var api = builder
 ;
 
 // Add frontend service and reference the API
-var frontend = builder
-    .AddViteApp("frontend", "../../../frontend")
+var frontend = builder.AddJavaScriptApp("angular", "../../../frontend", runScriptName: "start")
+    .WithNpm(installCommand: "ci")
+    .WithReference(api)
+    .WaitFor(api)
     .WithHttpEndpoint(name: "frontend-http", env: "PORT")
-    .WithReference(api);
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
 
 builder.Build().Run();
