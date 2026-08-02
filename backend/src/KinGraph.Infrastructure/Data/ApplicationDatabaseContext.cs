@@ -1,4 +1,5 @@
-﻿using KinGraph.Core.Aggregates.UserAggregate;
+﻿using KinGraph.Core.Aggregates.PersonAggregate;
+using KinGraph.Core.Aggregates.UserAggregate;
 using SmartEnum.EFCore;
 using System.Reflection;
 
@@ -8,6 +9,8 @@ public class ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseCont
     : DbContext(options)
 {
     public DbSet<User> Users => Set<User>();
+    public DbSet<Person> Persons => Set<Person>();
+
 
     // Override OnModelCreating to apply class configurations from the assembly
     protected override void OnModelCreating(ModelBuilder modelBuilder)

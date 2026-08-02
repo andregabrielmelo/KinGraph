@@ -17,8 +17,7 @@ public sealed record RelationshipRecord(
     int? GenerationOffset,
     int? Degree,
     bool? IsByMarriage,
-    bool? IsHalf,
-    string? Gender
+    bool? IsHalf
 );
 
 public class ListEndpoint(IMediator _mediator)
@@ -72,8 +71,7 @@ public class ListEndpoint(IMediator _mediator)
                 d.GenerationOffset,
                 d.Degree,
                 d.IsByMarriage,
-                d.IsHalf,
-                d.Gender?.ToString()
+                d.IsHalf
             ))
         );
     }

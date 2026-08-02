@@ -18,8 +18,6 @@ public sealed class CreateRelationshipRequest
 
     public string? Kind { get; set; }
 
-    public string? Gender { get; set; }
-
     public int? CousinDegree { get; set; }
 
     public bool IsByMarriage { get; set; }
@@ -49,7 +47,6 @@ public class CreateEndpoint(IMediator _mediator)
                 RelatedUserId = 2,
                 Type = "Family",
                 Kind = "Parent",
-                Gender = "Male",
             };
 
             s.Responses[204] = "Relationship created successfully";
@@ -76,16 +73,12 @@ public class CreateEndpoint(IMediator _mediator)
         FamilyRelationshipKind? kind = request.Kind is null
             ? null
             : Enum.Parse<FamilyRelationshipKind>(request.Kind, ignoreCase: true);
-        Gender? gender = request.Gender is null
-            ? null
-            : Enum.Parse<Gender>(request.Gender, ignoreCase: true);
 
         var command = new CreateRelationshipCommand(
             UserId.From(request.Id),
             UserId.From(request.RelatedUserId),
             type,
             kind,
-            gender,
             request.CousinDegree,
             request.IsByMarriage,
             request.IsHalf
@@ -101,7 +94,6 @@ public sealed class CreateRelationshipValidator : Validator<CreateRelationshipRe
 {
     private static readonly string[] ValidTypes = ["Family", "Friend"];
     private static readonly string[] ValidKinds = ["Parent", "Sibling", "Cousin"];
-    private static readonly string[] ValidGenders = ["Male", "Female"];
 
     public CreateRelationshipValidator()
     {
@@ -132,22 +124,6 @@ public sealed class CreateRelationshipValidator : Validator<CreateRelationshipRe
                             .NotNull()
                             .GreaterThanOrEqualTo(2)
                             .WithMessage("CousinDegree must be >= 2 for a Cousin relationship.");
-                    }
-                );
-
-                When(
-                    x =>
-                        string.Equals(x.Kind, "Parent", StringComparison.OrdinalIgnoreCase)
-                        || string.Equals(x.Kind, "Sibling", StringComparison.OrdinalIgnoreCase),
-                    () =>
-                    {
-                        RuleFor(x => x.Gender)
-                            .NotEmpty()
-                            .WithMessage("Gender is required for a Parent or Sibling relationship.")
-                            .Must(g =>
-                                g is null || ValidGenders.Contains(g, StringComparer.OrdinalIgnoreCase)
-                            )
-                            .WithMessage($"Gender must be one of: {string.Join(", ", ValidGenders)}");
                     }
                 );
             }
