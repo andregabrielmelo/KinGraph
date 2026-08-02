@@ -5,13 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Features\PersonFeatures\**" />
-    <Content Remove="Features\PersonFeatures\**" />
-    <EmbeddedResource Remove="Features\PersonFeatures\**" />
-    <None Remove="Features\PersonFeatures\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Ardalis.Result" />
     <PackageReference Include="FastEndpoints" />
     <PackageReference Include="FastEndpoints.Swagger" />
