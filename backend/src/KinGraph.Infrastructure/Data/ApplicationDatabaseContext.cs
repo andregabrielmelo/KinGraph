@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using KinGraph.Core.Aggregates.UserAggregate;
+﻿using KinGraph.Core.Aggregates.UserAggregate;
 using SmartEnum.EFCore;
+using System.Reflection;
 
 namespace KinGraph.Infrastructure.Data;
 

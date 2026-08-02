@@ -1,4 +1,5 @@
-﻿using KinGraph.Core.Aggregates.UserAggregate;
+﻿
+using KinGraph.Core.Aggregates.UserAggregate;
 using KinGraph.Core.ValueObjects;
 using KinGraph.UseCases.Users;
 using KinGraph.UseCases.Users.Update;
@@ -12,7 +13,7 @@ public sealed class UpdateUserRequest
     public int Id { get; set; }
 
     [Required]
-    public string? Name { get; set; }
+    public required string Name { get; set; }
     public string? PhoneNumber { get; set; }
 }
 
@@ -57,13 +58,10 @@ public class UpdateEndpoint(IMediator _mediator)
         Results<Ok<UpdateUserResponse>, NotFound, ProblemHttpResult>
     > ExecuteAsync(UpdateUserRequest request, CancellationToken cancellationToken)
     {
-        var phone = string.IsNullOrEmpty(request.PhoneNumber)
-            ? null
-            : new PhoneNumber("+1", request.PhoneNumber, null);
         var command = new UpdateUserCommand(
             UserId.From(request.Id),
             UserName.From(request.Name),
-            phone
+            request.PhoneNumber
         );
         var result = await _mediator.Send(command, cancellationToken);
 

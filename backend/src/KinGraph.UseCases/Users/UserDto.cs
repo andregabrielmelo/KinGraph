@@ -3,4 +3,4 @@ using KinGraph.Core.ValueObjects;
 
 namespace KinGraph.UseCases.Users;
 
-public record UserDto(UserId Id, UserName Name, PhoneNumber PhoneNumber);
+public record UserDto(UserId Id, UserName Name, PhoneNumber? PhoneNumber);

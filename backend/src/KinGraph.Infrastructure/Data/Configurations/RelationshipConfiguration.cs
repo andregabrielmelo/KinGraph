@@ -51,8 +51,6 @@ public class FamilyRelationshipConfiguration : IEntityTypeConfiguration<FamilyRe
         builder.Property(f => f.IsByMarriage).HasColumnName("is_by_marriage").IsRequired();
 
         builder.Property(f => f.IsHalf).HasColumnName("is_half").IsRequired();
-
-        builder.Property(f => f.Gender).HasColumnName("gender").HasConversion<string>();
     }
 }
 

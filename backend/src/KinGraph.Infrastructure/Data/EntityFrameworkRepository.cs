@@ -6,4 +6,5 @@ namespace KinGraph.Infrastructure.Data;
 public class EntityFrameworkRepository<T>(ApplicationDatabaseContext dbContext)
     : RepositoryBase<T>(dbContext),
         IRepository<T>
-    where T : class, IAggregateRoot { }
+    where T : class, IAggregateRoot
+{ }

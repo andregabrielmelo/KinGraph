@@ -1,4 +1,5 @@
-﻿using KinGraph.Core.Aggregates.UserAggregate;
+﻿using KinGraph.Core.Aggregates.PersonAggregate;
+using KinGraph.Core.Aggregates.UserAggregate;
 
 namespace KinGraph.Infrastructure.Data.Configurations;
 
@@ -17,6 +18,17 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasVogenConversion()
             .HasMaxLength(UserName.MaxLength)
             .IsRequired();
+
+        builder.Property(entity => entity.PersonId).HasVogenConversion().IsRequired();
+
+        builder.HasIndex(entity => entity.PersonId).IsUnique();
+
+        builder
+            .HasOne<Person>()
+            .WithOne()
+            .HasForeignKey<User>(user => user.PersonId)
+            .HasPrincipalKey<Person>(person => person.Id)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.OwnsOne(builder => builder.PhoneNumber);
     }

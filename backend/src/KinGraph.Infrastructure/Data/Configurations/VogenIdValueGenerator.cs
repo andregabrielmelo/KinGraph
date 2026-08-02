@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
+using System.Reflection;
 
 namespace KinGraph.Infrastructure.Data.Configurations;
 
