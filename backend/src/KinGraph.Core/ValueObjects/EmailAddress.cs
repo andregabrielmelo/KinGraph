@@ -10,15 +10,21 @@ public class EmailAddress : ValueObject
         RegexOptions.Compiled
     );
     public string Value { get; private set; }
-    public static EmailAddress Unknown { get; } = new EmailAddress(String.Empty);
+    public static EmailAddress Unknown { get; } = new EmailAddress(String.Empty, validate: false);
 
     public EmailAddress(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("Email cannot be empty");
+        : this(value, validate: true) { }
 
-        if (!EmailRegex.IsMatch(value))
-            throw new ArgumentException("Invalid email format");
+    private EmailAddress(string value, bool validate)
+    {
+        if (validate)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Email cannot be empty");
+
+            if (!EmailRegex.IsMatch(value))
+                throw new ArgumentException("Invalid email format");
+        }
 
         Value = value;
     }

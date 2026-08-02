@@ -16,6 +16,8 @@ public static class MiddlewareConfigurations
             app.UseHsts();
         }
 
+        app.UseCors(ServiceConfigurations.AngularDevCorsPolicy);
+
         app.UseFastEndpoints();
 
         if (app.Environment.IsDevelopment())

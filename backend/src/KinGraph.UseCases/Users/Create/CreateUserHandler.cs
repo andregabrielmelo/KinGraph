@@ -1,24 +1,45 @@
-﻿
-using KinGraph.Core.Aggregates.PersonAggregate;
+﻿using KinGraph.Core.Aggregates.PersonAggregate;
 using KinGraph.Core.Aggregates.UserAggregate;
+using KinGraph.Core.Aggregates.UserAggregate.Specifications;
 using KinGraph.Core.ValueObjects;
+using Microsoft.AspNetCore.Identity;
 
 namespace KinGraph.UseCases.Users.Create;
 
-public record CreateUserCommand(UserName Name, string PhoneNumber) : ICommand<Result<UserId>>;
+public record CreateUserCommand(
+    UserName Name,
+    EmailAddress Email,
+    string Password,
+    string PhoneNumber
+) : ICommand<Result<UserId>>;
 
-public class CreateUserHandler(IRepository<User> _userRepository, IRepository<Person> _personRepository)
-    : ICommandHandler<CreateUserCommand, Result<UserId>>
+public class CreateUserHandler(
+    IRepository<User> _userRepository,
+    IRepository<Person> _personRepository,
+    IPasswordHasher<User> _passwordHasher
+) : ICommandHandler<CreateUserCommand, Result<UserId>>
 {
     public async ValueTask<Result<UserId>> Handle(
         CreateUserCommand command,
         CancellationToken cancellationToken
     )
     {
+        var existingUser = await _userRepository.FirstOrDefaultAsync(
+            new UserByEmailSpecification(command.Email),
+            cancellationToken
+        );
+        if (existingUser is not null)
+        {
+            return Result<UserId>.Invalid(
+                new ValidationError(nameof(command.Email), "Email is already registered")
+            );
+        }
+
         var newPerson = Person.Create(PersonName.From(command.Name.Value));
         var createdPerson = await _personRepository.AddAsync(newPerson, cancellationToken);
 
-        var newUser = User.Create(command.Name, createdPerson.Id);
+        var passwordHash = _passwordHasher.HashPassword(null!, command.Password);
+        var newUser = User.Create(command.Name, createdPerson.Id, command.Email, passwordHash);
         if (!string.IsNullOrEmpty(command.PhoneNumber))
         {
             var phoneNumber = new PhoneNumber("+1", command.PhoneNumber, String.Empty);

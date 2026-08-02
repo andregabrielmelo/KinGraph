@@ -1,5 +1,7 @@
 using KinGraph.Core.Aggregates.PersonAggregate;
 using KinGraph.Core.Aggregates.UserAggregate;
+using KinGraph.Core.ValueObjects;
+using Microsoft.AspNetCore.Identity;
 
 namespace KinGraph.Infrastructure.Data;
 
@@ -28,7 +30,20 @@ public class SeedData
         dbContext.AddRange(people);
         await dbContext.SaveChangesAsync();
 
-        var users = names.Zip(people, (name, person) => new User(UserName.From(name), person.Id));
+        // Seed users are fixtures for pagination demos, not real accounts - a single shared
+        // placeholder password hash is enough (not meant to be logged into meaningfully).
+        var passwordHash = new PasswordHasher<User>().HashPassword(null!, "Seeded123!");
+
+        var users = names.Zip(
+            people,
+            (name, person) =>
+                new User(
+                    UserName.From(name),
+                    person.Id,
+                    new EmailAddress($"{name.ToLowerInvariant().Replace(" ", "")}@example.com"),
+                    passwordHash
+                )
+        );
         dbContext.Users.AddRange(users);
         await dbContext.SaveChangesAsync();
     }

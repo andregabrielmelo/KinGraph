@@ -15,11 +15,12 @@ public class RelationshipConfiguration : IEntityTypeConfiguration<Relationship>
             .HasConversion(id => id.Value, v => PersonId.From(v))
             .IsRequired();
 
-        builder
-            .HasOne<Person>()
-            .WithMany()
-            .HasForeignKey("source_person_id")
-            .OnDelete(DeleteBehavior.Restrict);
+        // The Person -> Relationship side of this FK is fully configured in
+        // PersonConfiguration.cs (HasMany(x => x.Relationships).WithOne()...).
+        // Configuring it again from this side too (HasOne<Person>().WithMany())
+        // made EF Core's shadow-FK fixup unreliable for newly-added Relationship
+        // entities - the "source_person_id" value stayed uninitialized at
+        // SaveChanges time even though the parent Person was fully tracked.
 
         builder
             .HasDiscriminator<string>("type")
