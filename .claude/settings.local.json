@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status *)",
+      "Bash(git add *)",
+      "Bash(dotnet build *)",
+      "Bash(git config *)",
+      "Bash(git checkout *)",
+      "Bash(dotnet ef *)",
+      "Bash(docker exec *)",
+      "Bash(npm run *)",
+      "Bash(git push *)",
+      "Bash(gh auth *)",
+      "Bash(gh api *)"
+    ]
+  }
+}
