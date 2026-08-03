@@ -14,5 +14,13 @@ export const routes: Routes = [
     path: 'profile',
     canActivate: [authGuard],
     loadComponent: () => import('./profile/profile-page/profile-page').then((m) => m.ProfilePage)
+  },
+  {
+    path: 'relationships',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./relationships/relationship-list-page/relationship-list-page').then(
+        (m) => m.RelationshipListPage
+      )
   }
 ];

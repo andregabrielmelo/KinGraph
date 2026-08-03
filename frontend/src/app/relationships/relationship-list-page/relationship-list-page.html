@@ -1,0 +1,112 @@
+<div class="mx-auto max-w-2xl space-y-8 p-6">
+  <div>
+    <h1 class="mb-4 text-2xl font-semibold">Your relationships</h1>
+
+    @if (loading()) {
+      <p class="text-sm text-gray-600">Loading…</p>
+    } @else if (relationships().length === 0) {
+      <p class="text-sm text-gray-600">No relationships yet - add one below.</p>
+    } @else {
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="border-b border-gray-200">
+            <th class="py-2">Name</th>
+            <th class="py-2">Relationship</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of relationships(); track item.relatedPersonId) {
+            <tr class="border-b border-gray-100">
+              <td class="py-2">{{ item.relatedPersonName }}</td>
+              <td class="py-2">{{ label(item) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+  <div>
+    <h2 class="mb-4 text-lg font-semibold">Add a relationship</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+      <div>
+        <label for="relatedUserId" class="block text-sm font-medium">Person</label>
+        <select
+          id="relatedUserId"
+          formControlName="relatedUserId"
+          class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+        >
+          <option [value]="0" disabled>Select a person…</option>
+          @for (user of otherUsers(); track user.id) {
+            <option [value]="user.id">{{ user.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="type" class="block text-sm font-medium">Type</label>
+        <select
+          id="type"
+          formControlName="type"
+          class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+        >
+          <option value="Friend">Friend</option>
+          <option value="Family">Family</option>
+        </select>
+      </div>
+
+      @if (form.controls.type.value === 'Family') {
+        <div>
+          <label for="kind" class="block text-sm font-medium">Kind</label>
+          <select
+            id="kind"
+            formControlName="kind"
+            class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+          >
+            <option value="" disabled>Select a kind…</option>
+            <option value="Parent">Parent (they are my parent)</option>
+            <option value="Sibling">Sibling</option>
+            <option value="Cousin">Cousin</option>
+          </select>
+        </div>
+
+        @if (form.controls.kind.value === 'Cousin') {
+          <div>
+            <label for="cousinDegree" class="block text-sm font-medium">Cousin degree</label>
+            <input
+              id="cousinDegree"
+              type="number"
+              min="2"
+              formControlName="cousinDegree"
+              class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            />
+          </div>
+        }
+
+        <div class="flex gap-4">
+          <label class="flex items-center gap-2 text-sm">
+            <input type="checkbox" formControlName="isByMarriage" />
+            By marriage
+          </label>
+          <label class="flex items-center gap-2 text-sm">
+            <input type="checkbox" formControlName="isHalf" />
+            Half
+          </label>
+        </div>
+      }
+
+      @if (errorMessage(); as message) {
+        <p class="text-sm text-red-600">{{ message }}</p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="submitting()"
+        class="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+      >
+        {{ submitting() ? 'Adding…' : 'Add relationship' }}
+      </button>
+    </form>
+  </div>
+</div>
