@@ -18,6 +18,9 @@ public static class MiddlewareConfigurations
 
         app.UseCors(ServiceConfigurations.AngularDevCorsPolicy);
 
+        app.UseAuthentication();
+        app.UseAuthorization();
+
         app.UseFastEndpoints();
 
         if (app.Environment.IsDevelopment())

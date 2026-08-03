@@ -126,4 +126,24 @@ public static class ResultExtensions
     {
         return TypedResults.Ok(mapResponse(result.Value));
     }
+
+    /// <summary>
+    /// Maps Result to TypedResults for Login endpoints that return Ok, Unauthorized, or ProblemHttpResult
+    /// </summary>
+    public static Results<Ok<TResponse>, UnauthorizedHttpResult, ProblemHttpResult> ToLoginResult<
+        TValue,
+        TResponse
+    >(this Result<TValue> result, Func<TValue, TResponse> mapResponse)
+    {
+        return result.Status switch
+        {
+            ResultStatus.Ok => TypedResults.Ok(mapResponse(result.Value)),
+            ResultStatus.Unauthorized => TypedResults.Unauthorized(),
+            _ => TypedResults.Problem(
+                title: "Login failed",
+                detail: string.Join("; ", result.Errors),
+                statusCode: StatusCodes.Status400BadRequest
+            ),
+        };
+    }
 }

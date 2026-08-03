@@ -13,6 +13,7 @@ public static class OptionConfigurations
     {
         services
             .Configure<MailserverConfiguration>(configuration.GetSection("Mailserver"))
+            .Configure<JwtOptions>(configuration.GetSection("Jwt"))
             // Configure Web Behavior
             .Configure<CookiePolicyOptions>(options =>
             {
