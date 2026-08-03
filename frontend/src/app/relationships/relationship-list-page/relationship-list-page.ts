@@ -4,16 +4,21 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RelationshipService } from '../relationship.service';
 import { relationshipLabel } from '../relationship-label.util';
 import { RelationshipRecord, UserSummary } from '../models/relationship.model';
+import { RelationshipGraph } from '../relationship-graph/relationship-graph';
+import { PersonService } from '../../profile/person.service';
+
+type ViewMode = 'list' | 'graph';
 
 @Component({
   selector: 'app-relationship-list-page',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RelationshipGraph],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './relationship-list-page.html'
 })
 export class RelationshipListPage implements OnInit {
   private readonly relationshipService = inject(RelationshipService);
+  private readonly personService = inject(PersonService);
   private readonly formBuilder = inject(FormBuilder);
 
   readonly loading = signal(true);
@@ -21,6 +26,8 @@ export class RelationshipListPage implements OnInit {
   readonly otherUsers = signal<UserSummary[]>([]);
   readonly submitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  readonly viewMode = signal<ViewMode>('list');
+  readonly myName = signal('');
 
   readonly form = this.formBuilder.nonNullable.group({
     relatedUserId: [0, [Validators.required, Validators.min(1)]],
@@ -36,6 +43,7 @@ export class RelationshipListPage implements OnInit {
   ngOnInit(): void {
     this.loadRelationships();
     this.relationshipService.listOtherUsers().subscribe((users) => this.otherUsers.set(users));
+    this.personService.getMyProfile().subscribe((profile) => this.myName.set(profile.name));
   }
 
   private loadRelationships(): void {
