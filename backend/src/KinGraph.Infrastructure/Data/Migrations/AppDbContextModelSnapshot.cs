@@ -230,7 +230,7 @@ namespace KinGraph.Infrastructure.Data.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("password_hash");
+                        .HasColumnName("password");
 
                     b.Property<int>("PersonId")
                         .HasColumnType("integer")
