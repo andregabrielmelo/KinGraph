@@ -16,7 +16,6 @@ var api = builder
     .WithReference(applicationDatabase)
     .WaitFor(applicationDatabase)
     .WithHttpEndpoint(name: "api-http");
-;
 
 // Add frontend service and reference the API
 var frontend = builder.AddJavaScriptApp("angular", "../../../frontend", runScriptName: "start")
