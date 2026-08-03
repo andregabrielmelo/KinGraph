@@ -3,22 +3,22 @@ using KinGraph.Core.ValueObjects;
 
 namespace KinGraph.Core.Aggregates.UserAggregate;
 
-public class User(UserName name, PersonId personId, EmailAddress email, string passwordHash)
+public class User(UserName name, PersonId personId, EmailAddress email, string password)
     : EntityBase<User, UserId>,
         IAggregateRoot
 {
     public UserName Name { get; private set; } = name;
     public PersonId PersonId { get; private set; } = personId;
     public EmailAddress Email { get; private set; } = email;
-    public string PasswordHash { get; private set; } = passwordHash;
+    public string Password { get; private set; } = password;
     public PhoneNumber? PhoneNumber { get; private set; }
 
     public static User Create(
         UserName name,
         PersonId personId,
         EmailAddress email,
-        string passwordHash
-    ) => new User(name, personId, email, passwordHash);
+        string password
+    ) => new User(name, personId, email, password);
 
     public User UpdateName(UserName newName)
     {
@@ -37,9 +37,9 @@ public class User(UserName name, PersonId personId, EmailAddress email, string p
         return this;
     }
 
-    public User UpdatePasswordHash(string newPasswordHash)
+    public User UpdatePassword(string newPassword)
     {
-        PasswordHash = newPasswordHash;
+        Password = newPassword;
         return this;
     }
 }

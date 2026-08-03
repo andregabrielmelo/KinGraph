@@ -38,8 +38,8 @@ public class CreateUserHandler(
         var newPerson = Person.Create(PersonName.From(command.Name.Value));
         var createdPerson = await _personRepository.AddAsync(newPerson, cancellationToken);
 
-        var passwordHash = _passwordHasher.HashPassword(null!, command.Password);
-        var newUser = User.Create(command.Name, createdPerson.Id, command.Email, passwordHash);
+        var password = _passwordHasher.HashPassword(null!, command.Password);
+        var newUser = User.Create(command.Name, createdPerson.Id, command.Email, password);
         if (!string.IsNullOrEmpty(command.PhoneNumber))
         {
             var phoneNumber = new PhoneNumber("+1", command.PhoneNumber, String.Empty);

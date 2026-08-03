@@ -227,7 +227,7 @@ namespace KinGraph.Infrastructure.Data.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("password_hash");

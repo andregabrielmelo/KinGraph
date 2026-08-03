@@ -32,7 +32,7 @@ public class SeedData
 
         // Seed users are fixtures for pagination demos, not real accounts - a single shared
         // placeholder password hash is enough (not meant to be logged into meaningfully).
-        var passwordHash = new PasswordHasher<User>().HashPassword(null!, "Seeded123!");
+        var password = new PasswordHasher<User>().HashPassword(null!, "Seeded123!");
 
         var users = names.Zip(
             people,
@@ -41,7 +41,7 @@ public class SeedData
                     UserName.From(name),
                     person.Id,
                     new EmailAddress($"{name.ToLowerInvariant().Replace(" ", "")}@example.com"),
-                    passwordHash
+                    password
                 )
         );
         dbContext.Users.AddRange(users);
