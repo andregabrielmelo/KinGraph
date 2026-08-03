@@ -29,7 +29,6 @@ public class ListEndpoint(IMediator _mediator)
     public override void Configure()
     {
         Get("/users/{id}/relationships");
-        AllowAnonymous();
 
         Summary(s =>
         {
@@ -58,6 +57,12 @@ public class ListEndpoint(IMediator _mediator)
         Results<Ok<IEnumerable<RelationshipRecord>>, NotFound, ProblemHttpResult>
     > ExecuteAsync(ListUserRelationshipsRequest request, CancellationToken cancellationToken)
     {
+        var callerId = HttpContext.User.GetUserId();
+        if (callerId is null || callerId.Value.Value != request.Id)
+        {
+            return TypedResults.NotFound();
+        }
+
         var result = await _mediator.Send(
             new ListUserRelationshipsQuery(UserId.From(request.Id)),
             cancellationToken

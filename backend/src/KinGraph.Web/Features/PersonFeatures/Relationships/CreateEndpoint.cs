@@ -34,7 +34,6 @@ public class CreateEndpoint(IMediator _mediator)
     public override void Configure()
     {
         Post("/users/{id}/relationships");
-        AllowAnonymous();
 
         Summary(s =>
         {
@@ -69,6 +68,12 @@ public class CreateEndpoint(IMediator _mediator)
         Results<NoContent, ValidationProblem, NotFound, ProblemHttpResult>
     > ExecuteAsync(CreateRelationshipRequest request, CancellationToken cancellationToken)
     {
+        var callerId = HttpContext.User.GetUserId();
+        if (callerId is null || callerId.Value.Value != request.Id)
+        {
+            return TypedResults.NotFound();
+        }
+
         var type = Enum.Parse<RelationshipType>(request.Type, ignoreCase: true);
         FamilyRelationshipKind? kind = request.Kind is null
             ? null
