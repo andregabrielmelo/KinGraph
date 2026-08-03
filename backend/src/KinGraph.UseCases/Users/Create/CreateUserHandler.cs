@@ -24,6 +24,7 @@ public class CreateUserHandler(
         CancellationToken cancellationToken
     )
     {
+        // TODO: Review if this is really the place to check for existing user, or if it should be done in the domain layer
         var existingUser = await _userRepository.FirstOrDefaultAsync(
             new UserByEmailSpecification(command.Email),
             cancellationToken
