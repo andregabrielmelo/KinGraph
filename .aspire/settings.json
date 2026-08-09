@@ -1,3 +1,6 @@
 {
-  "appHostPath": "../backend/src/KinGraph.AppHost/KinGraph.AppHost.csproj"
+  "appHostPath": "../backend/src/KinGraph.AppHost/KinGraph.AppHost.csproj",
+  "features": {
+    "defaultWatchEnabled": "true"
+  }
 }
