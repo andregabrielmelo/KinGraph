@@ -10,7 +10,6 @@ public class EmailAddress : ValueObject
         RegexOptions.Compiled
     );
     public string Value { get; private set; }
-    public static EmailAddress Unknown { get; } = new EmailAddress(String.Empty);
 
     public EmailAddress(string value)
     {
@@ -25,9 +24,6 @@ public class EmailAddress : ValueObject
 
     public override string ToString()
     {
-        if (this == Unknown)
-            return "Unknown";
-
         return Value;
     }
 
