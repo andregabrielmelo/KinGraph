@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KinGraph.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    [Migration("20260802233401_AddEmailAndPasswordHashToUser")]
+    [Migration("20260802233401_AddEmailAndPasswordToUser")]
     partial class AddEmailAndPasswordHashToUser
     {
         /// <inheritdoc />
@@ -230,10 +230,10 @@ namespace KinGraph.Infrastructure.Data.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("password_hash");
+                        .HasColumnName("password");
 
                     b.Property<int>("PersonId")
                         .HasColumnType("integer")

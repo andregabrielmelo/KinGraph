@@ -174,10 +174,6 @@ namespace KinGraph.Infrastructure.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("PersonId")
-                        .HasColumnType("integer")
-                        .HasColumnName("person_id");
-
                     b.Property<int>("RelatedPersonId")
                         .HasColumnType("integer")
                         .HasColumnName("related_person_id");
@@ -194,9 +190,6 @@ namespace KinGraph.Infrastructure.Data.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_person_relationships");
-
-                    b.HasIndex("PersonId")
-                        .HasDatabaseName("ix_person_relationships_person_id");
 
                     b.HasIndex("source_person_id", "RelatedPersonId", "type")
                         .IsUnique()
@@ -573,11 +566,6 @@ namespace KinGraph.Infrastructure.Data.Migrations
                 {
                     b.HasOne("KinGraph.Core.Aggregates.PersonAggregate.Person", null)
                         .WithMany("Relationships")
-                        .HasForeignKey("PersonId")
-                        .HasConstraintName("fk_person_relationships_persons_person_id");
-
-                    b.HasOne("KinGraph.Core.Aggregates.PersonAggregate.Person", null)
-                        .WithMany()
                         .HasForeignKey("source_person_id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()

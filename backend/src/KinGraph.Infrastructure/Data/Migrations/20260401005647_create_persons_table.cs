@@ -220,7 +220,6 @@ namespace KinGraph.Infrastructure.Data.Migrations
                     degree = table.Column<int>(type: "integer", nullable: true),
                     is_by_marriage = table.Column<bool>(type: "boolean", nullable: true),
                     is_half = table.Column<bool>(type: "boolean", nullable: true),
-                    gender = table.Column<string>(type: "text", nullable: true),
                 },
                 constraints: table =>
                 {

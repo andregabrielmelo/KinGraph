@@ -10,24 +10,18 @@ namespace KinGraph.Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "gender",
-                table: "person_relationships");
-
             migrationBuilder.AddColumn<string>(
                 name: "email",
                 table: "users",
                 type: "character varying(320)",
                 maxLength: 320,
-                nullable: false,
-                defaultValue: "");
+                nullable: false);
 
             migrationBuilder.AddColumn<string>(
-                name: "password_hash",
+                name: "password",
                 table: "users",
                 type: "text",
-                nullable: false,
-                defaultValue: "");
+                nullable: false);
 
             migrationBuilder.CreateIndex(
                 name: "ix_users_email",
@@ -48,14 +42,8 @@ namespace KinGraph.Infrastructure.Data.Migrations
                 table: "users");
 
             migrationBuilder.DropColumn(
-                name: "password_hash",
+                name: "password",
                 table: "users");
-
-            migrationBuilder.AddColumn<string>(
-                name: "gender",
-                table: "person_relationships",
-                type: "text",
-                nullable: true);
         }
     }
 }
