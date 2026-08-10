@@ -7,6 +7,7 @@ import {
   Validators
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
@@ -18,17 +19,17 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 @Component({
   selector: 'app-register-page',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './register-page.html'
 })
 export class RegisterPage {
   private readonly authService = inject(AuthService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly router = inject(Router);
 
   readonly submitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
-  readonly registeredName = signal<string | null>(null);
 
   readonly form = this.formBuilder.nonNullable.group(
     {
@@ -51,10 +52,9 @@ export class RegisterPage {
 
     const { name, email, password } = this.form.getRawValue();
     this.authService.register({ name, email, password }).subscribe({
-      next: (response) => {
+      next: () => {
         this.submitting.set(false);
-        this.registeredName.set(response.name);
-        this.form.reset();
+        this.router.navigateByUrl('/home');
       },
       error: (error: HttpErrorResponse) => {
         this.submitting.set(false);
