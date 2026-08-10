@@ -1,7 +1,10 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from './models/auth.model';
+import { RegisterResponse } from './models/register-response.model';
+import { RegisterRequest } from './models/register-request.model';
+import { LoginResponse } from './models/login-response.model';
+import { LoginRequest } from './models/login-request.model';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 // No backend token is issued yet (no /login endpoint, and register doesn't return one either),
 // so this is a local-only "am I in a session" marker, not real authentication. Swap this out

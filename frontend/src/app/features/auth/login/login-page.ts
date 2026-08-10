@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth-service';
 
 @Component({
-  selector: 'app-login-page',
+  selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,

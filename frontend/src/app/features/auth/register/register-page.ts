@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth-service';
 
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
@@ -17,7 +17,7 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 }
 
 @Component({
-  selector: 'app-register-page',
+  selector: 'app-register',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
