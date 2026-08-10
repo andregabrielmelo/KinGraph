@@ -214,5 +214,7 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
         builder.Navigation(x => x.ExtraFields).UsePropertyAccessMode(PropertyAccessMode.Field);
 
         builder.Navigation(x => x.Addresses).UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Navigation(x => x.Relationships).UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

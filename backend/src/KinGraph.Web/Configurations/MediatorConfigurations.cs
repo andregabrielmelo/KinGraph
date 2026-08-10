@@ -1,5 +1,6 @@
 ﻿using KinGraph.Core.Aggregates.UserAggregate;
 using KinGraph.Infrastructure;
+using KinGraph.UseCases.Users;
 
 namespace KinGraph.Web.Configurations;
 
@@ -20,6 +21,7 @@ public static class MediatorConfigurations
             options.Assemblies =
             [
                 typeof(User), // Core
+                typeof(UserDto), // UseCases
                 typeof(InfrastructureServiceExtensions), // Infrastructure
                 typeof(MediatorConfigurations), // Web
             ];

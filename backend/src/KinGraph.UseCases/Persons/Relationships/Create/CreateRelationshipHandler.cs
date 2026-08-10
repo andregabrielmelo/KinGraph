@@ -73,12 +73,6 @@ public class CreateRelationshipHandler(
             switch (command.Kind)
             {
                 case FamilyRelationshipKind.Parent:
-                    if (sourcePerson.Gender is null)
-                        return Result.Invalid(
-                            new ValidationError(
-                                "Source person must have a Gender set on their profile first."
-                            )
-                        );
                     forward = FamilyRelationship.Parent(
                         relatedPerson.Id,
                         command.IsByMarriage,
@@ -91,12 +85,6 @@ public class CreateRelationshipHandler(
                     );
                     break;
                 case FamilyRelationshipKind.Sibling:
-                    if (sourcePerson.Gender is null)
-                        return Result.Invalid(
-                            new ValidationError(
-                                "Source person must have a Gender set on their profile first."
-                            )
-                        );
                     forward = FamilyRelationship.Sibling(
                         relatedPerson.Id,
                         command.IsByMarriage,

@@ -1,4 +1,5 @@
 ﻿using KinGraph.Core.Aggregates.UserAggregate;
+using KinGraph.Core.ValueObjects;
 using KinGraph.UseCases.Users.Create;
 using KinGraph.Web.Extensions;
 
@@ -8,6 +9,12 @@ public sealed class CreateUserRequest
 {
     [Required]
     public string Name { get; set; } = String.Empty;
+
+    [Required]
+    public string Email { get; set; } = String.Empty;
+
+    [Required]
+    public string Password { get; set; } = String.Empty;
     public string? PhoneNumber { get; set; } = null;
 }
 
@@ -27,8 +34,13 @@ public class CreateEndpoint(IMediator _mediator)
         Summary(s =>
         {
             s.Summary = "Create a new user";
-            s.Description = "Creates a new user with the specified name and phone number.";
-            s.ExampleRequest = new CreateUserRequest { Name = "Sample User" };
+            s.Description = "Creates a new user with the specified name, email, password, and phone number.";
+            s.ExampleRequest = new CreateUserRequest
+            {
+                Name = "Sample User",
+                Email = "sample.user@example.com",
+                Password = "Passw0rd!",
+            };
             s.ResponseExamples[201] = new CreateUserResponse(Id: 1, Name: "Teste");
 
             s.Responses[201] = "User created successfully";
@@ -51,6 +63,8 @@ public class CreateEndpoint(IMediator _mediator)
     {
         var command = new CreateUserCommand(
             UserName.From(request.Name),
+            new EmailAddress(request.Email),
+            request.Password,
             request.PhoneNumber ?? String.Empty
         );
         var result = await _mediator.Send(command, cancellationToken);
@@ -72,5 +86,17 @@ public sealed class CreateUserValidator : Validator<CreateUserRequest>
             .MinimumLength(2)
             .MaximumLength(UserName.MaxLength)
             .WithMessage($"User name must not exceed {UserName.MaxLength} characters");
+
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .WithMessage("Email is required")
+            .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+            .WithMessage("Email must be a valid email address");
+
+        RuleFor(x => x.Password)
+            .NotEmpty()
+            .WithMessage("Password is required")
+            .MinimumLength(8)
+            .WithMessage("Password must be at least 8 characters");
     }
 }

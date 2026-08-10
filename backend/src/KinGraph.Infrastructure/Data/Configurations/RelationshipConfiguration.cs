@@ -16,12 +16,6 @@ public class RelationshipConfiguration : IEntityTypeConfiguration<Relationship>
             .IsRequired();
 
         builder
-            .HasOne<Person>()
-            .WithMany()
-            .HasForeignKey("source_person_id")
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasDiscriminator<string>("type")
             .HasValue<FriendRelationship>("relationship_friend")
             .HasValue<FamilyRelationship>("relationship_family")

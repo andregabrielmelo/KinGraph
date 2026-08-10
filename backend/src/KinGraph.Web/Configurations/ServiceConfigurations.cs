@@ -1,6 +1,8 @@
-﻿using KinGraph.Core.Interfaces;
+﻿using KinGraph.Core.Aggregates.UserAggregate;
+using KinGraph.Core.Interfaces;
 using KinGraph.Infrastructure;
 using KinGraph.Infrastructure.Email;
+using Microsoft.AspNetCore.Identity;
 
 namespace KinGraph.Web.Configurations;
 
@@ -17,6 +19,9 @@ public static class ServiceConfigurations
             .AddMediatorSourceGenerator(logger);
 
         services.AddScoped<IEmailSender, MimeKitEmailSender>();
+
+        // Stateless/thread-safe, so a singleton is fine (and avoids per-request allocation).
+        services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
         logger.LogInformation(
             "{Project} services registered",

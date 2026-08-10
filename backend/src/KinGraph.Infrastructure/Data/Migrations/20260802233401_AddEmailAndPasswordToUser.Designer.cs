@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KinGraph.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    [Migration("20260802211212_AddPersonIdToUser")]
-    partial class AddPersonIdToUser
+    [Migration("20260802233401_AddEmailAndPasswordToUser")]
+    partial class AddEmailAndPasswordHashToUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -218,11 +218,22 @@ namespace KinGraph.Infrastructure.Data.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)")
+                        .HasColumnName("email");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password");
 
                     b.Property<int>("PersonId")
                         .HasColumnType("integer")
@@ -230,6 +241,10 @@ namespace KinGraph.Infrastructure.Data.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_users");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_email");
 
                     b.HasIndex("PersonId")
                         .IsUnique()

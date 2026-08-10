@@ -238,10 +238,6 @@ namespace KinGraph.Infrastructure.Data.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("degree");
 
-                    b.Property<string>("Gender")
-                        .HasColumnType("text")
-                        .HasColumnName("gender");
-
                     b.Property<int>("GenerationOffset")
                         .HasColumnType("integer")
                         .HasColumnName("generation_offset");

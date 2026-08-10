@@ -1,5 +1,6 @@
 ﻿using KinGraph.Core.Aggregates.PersonAggregate;
 using KinGraph.Core.Aggregates.UserAggregate;
+using KinGraph.Core.ValueObjects;
 
 namespace KinGraph.Infrastructure.Data.Configurations;
 
@@ -22,6 +23,16 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(entity => entity.PersonId).HasVogenConversion().IsRequired();
 
         builder.HasIndex(entity => entity.PersonId).IsUnique();
+
+        builder
+            .Property(entity => entity.Email)
+            .HasConversion(email => email.Value, value => new EmailAddress(value))
+            .HasMaxLength(320)
+            .IsRequired();
+
+        builder.HasIndex(entity => entity.Email).IsUnique();
+
+        builder.Property(entity => entity.Password).IsRequired();
 
         builder
             .HasOne<Person>()

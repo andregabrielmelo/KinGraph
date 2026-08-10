@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KinGraph.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    [Migration("20260802211212_AddPersonIdToUser")]
-    partial class AddPersonIdToUser
+    [Migration("20260810002331_RenamePasswordHashToPassword")]
+    partial class RenamePasswordHashToPassword
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -177,10 +177,6 @@ namespace KinGraph.Infrastructure.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("PersonId")
-                        .HasColumnType("integer")
-                        .HasColumnName("person_id");
-
                     b.Property<int>("RelatedPersonId")
                         .HasColumnType("integer")
                         .HasColumnName("related_person_id");
@@ -197,9 +193,6 @@ namespace KinGraph.Infrastructure.Data.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_person_relationships");
-
-                    b.HasIndex("PersonId")
-                        .HasDatabaseName("ix_person_relationships_person_id");
 
                     b.HasIndex("source_person_id", "RelatedPersonId", "type")
                         .IsUnique()
@@ -218,11 +211,22 @@ namespace KinGraph.Infrastructure.Data.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)")
+                        .HasColumnName("email");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password");
 
                     b.Property<int>("PersonId")
                         .HasColumnType("integer")
@@ -230,6 +234,10 @@ namespace KinGraph.Infrastructure.Data.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_users");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_email");
 
                     b.HasIndex("PersonId")
                         .IsUnique()
@@ -561,11 +569,6 @@ namespace KinGraph.Infrastructure.Data.Migrations
                 {
                     b.HasOne("KinGraph.Core.Aggregates.PersonAggregate.Person", null)
                         .WithMany("Relationships")
-                        .HasForeignKey("PersonId")
-                        .HasConstraintName("fk_person_relationships_persons_person_id");
-
-                    b.HasOne("KinGraph.Core.Aggregates.PersonAggregate.Person", null)
-                        .WithMany()
                         .HasForeignKey("source_person_id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
